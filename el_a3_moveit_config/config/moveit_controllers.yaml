@@ -1,0 +1,20 @@
+# MoveIt controller configuration for EL-A3 robot arm
+
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - arm_controller
+
+  arm_controller:
+    type: FollowJointTrajectory
+    action_ns: follow_joint_trajectory
+    default: true
+    joints:
+      - L1_joint
+      - L2_joint
+      - L3_joint
+      - L4_joint
+      - L5_joint
+      - L6_joint
+

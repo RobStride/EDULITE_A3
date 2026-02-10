@@ -1,0 +1,44 @@
+###############################################
+# MoveIt Servo configuration for EL-A3 robot arm
+# Uses Jacobian matrix for real-time Cartesian incremental control
+###############################################
+
+use_gazebo: false
+
+## Properties of incoming commands
+command_in_type: "speed_units"  # Use velocity units (m/s, rad/s)
+scale:
+  linear: 0.5     # Max linear velocity m/s
+  rotational: 1.0  # Max angular velocity rad/s
+  joint: 0.5       # Joint velocity scale
+
+## Properties of outgoing commands
+publish_period: 0.02  # 50Hz
+command_out_type: trajectory_msgs/JointTrajectory
+
+publish_joint_positions: true
+publish_joint_velocities: true
+publish_joint_accelerations: false
+
+## Smoothing filter plugin
+smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
+
+## MoveIt properties
+move_group_name: arm
+planning_frame: base_link
+
+## Other frames
+ee_frame_name: end_effector
+robot_link_command_frame: end_effector
+
+## Stopping behaviour
+incoming_command_timeout: 0.2  # Command timeout (seconds)
+num_outgoing_halt_msgs_to_publish: 4
+
+## Configure handling of singularities and joint limits
+lower_singularity_threshold: 17.0  # Singularity deceleration threshold
+hard_stop_singularity_threshold: 30.0  # Singularity stop threshold
+joint_limit_margin: 0.1  # Joint limit margin (rad)
+
+## Collision checking (disabled for better performance)
+check_collisions: false

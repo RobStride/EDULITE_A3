@@ -1,0 +1,59 @@
+# MoveIt Servo configuration
+# For real-time servo control of the EL-A3 robot arm
+
+servo_node:
+  ros__parameters:
+    # Planning group name
+    move_group_name: arm
+    
+    # Coordinate frames
+    planning_frame: base_link
+    ee_frame_name: L6
+    
+    # Publish rate
+    publish_period: 0.034  # ~30 Hz
+    
+    # Input topic
+    command_in_type: "unitless"  # Accepts unitless commands
+    scale:
+      # Linear and angular velocity scaling
+      linear: 0.4   # Linear velocity scale
+      rotational: 0.8  # Angular velocity scale
+      joint: 0.5   # Joint velocity scale
+    
+    # Low-pass filter plugin
+    low_pass_filter_coeff: 2.0  # Filter coefficient, smaller = smoother but more latency
+    
+    # Collision checking
+    check_collisions: false  # Set to true to enable collision checking (increases computation)
+    collision_check_rate: 10.0  # Hz
+    
+    # Singularity and joint limit checking
+    lower_singularity_threshold: 17.0  # Singularity threshold
+    hard_stop_singularity_threshold: 30.0
+    leaving_singularity_threshold_multiplier: 2.0
+    
+    # Joint limits
+    joint_limit_margin: 0.1  # Radians, safety margin from joint limits
+    
+    # Velocity limits
+    override_velocity_scaling_factor: 0.0  # 0 means use default
+    
+    # Other settings
+    halt_all_joints_in_joint_mode: true
+    halt_all_joints_in_cartesian_mode: false
+    
+    # Publish topic
+    status_topic: ~/status
+    
+    # Command timeout
+    incoming_command_timeout: 0.1  # Seconds, stops if no command received within this time
+
+# Controller configuration
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+
+
+

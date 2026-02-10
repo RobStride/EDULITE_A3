@@ -1,0 +1,15 @@
+# 仅启动 arm2 (can1) 的配置
+# 用于配合 real_teleop.launch.py (can0) 实现双臂控制
+
+arms:
+  arm2:
+    prefix: "arm2_"
+    can_interface: "can1"
+    host_can_id: 253
+    enabled: true
+    inertia_config_path: "/home/wy/RS/A3/el_a3_description/config/inertia_params_arm2.yaml"
+
+global:
+  update_rate: 200
+  use_mock_hardware: false
+  use_rviz: false

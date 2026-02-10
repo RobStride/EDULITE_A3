@@ -1,0 +1,45 @@
+# EL-A3 robot arm inertia parameter configuration file
+# Used for Pinocchio gravity compensation calculation
+# These parameters are obtained by calibration program fitting, overriding URDF defaults
+#
+# Calibration date: 2026-02-04 18:59:19
+# Calibration program: scripts/inertia_calibration.py
+# RMSE: 0.0793 Nm
+# R²: 0.9952
+
+# Whether to enable calibrated inertia parameters
+use_calibrated_params: true
+
+# Link inertia parameters
+inertia_params:
+  # L2 - Upper arm
+  L2:
+    mass: 0.9106
+    com: [0.0866264765517212, 0.0, 0.0]
+  
+  # L3 - Forearm
+  L3:
+    mass: 0.3747
+    com: [-0.08035013944161637, 0.03291194928774231, 0.003]
+  
+  # L4 - Wrist roll
+  L4:
+    mass: 0.4854
+    com: [-0.0426303052036783, 0.012954802906795784, 0.0]
+  
+  # L5 - Wrist pitch
+  L5:
+    mass: 0.0100
+    com: [0.004, 0.0, 0.0180777232305329]
+  
+  # L6 - End-effector yaw
+  L6:
+    mass: 0.5317
+    com: [0.0, -0.001, -0.07]
+
+# Calibration statistics
+calibration_info:
+  date: "2026-02-04 18:59:19"
+  num_samples: 115
+  rmse: 0.0793
+  r_squared: 0.9952

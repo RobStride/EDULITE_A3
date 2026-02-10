@@ -1,0 +1,11 @@
+{
+    "url": "https://cad.onshape.com/documents/2139d6249ad18a0629ecd155/w/44c8e5f7c4f912e4893cb001/e/da73c3b1a87fd35b10ae5fe0",
+    "output_format": "urdf",
+    "output_filename": "EDULITE-A3",
+    "assets_directory": "meshes",
+    "robot_name": "EDULITE-A3",
+    "ignore_limits": false,
+    "draw_frames": false,
+    "no_dynamics": false,
+    "include_configuration_suffix": true
+}

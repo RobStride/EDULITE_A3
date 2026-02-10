@@ -1,0 +1,103 @@
+# OMPL planning configuration for EL-A3 robot arm
+#
+# S-Curve Trajectory Smoothing:
+# The hardware interface (el_a3_hardware) implements a standard 7-segment S-curve
+# trajectory generator that processes all position commands. This ensures smooth
+# motion with continuous acceleration (jerk-limited) regardless of the trajectory
+# source (MoveIt planning or Xbox controller).
+#
+# The TOTG (Time-Optimal Trajectory Generation) handles velocity/acceleration
+# limits, while the hardware layer adds jerk limiting for S-curve smoothness.
+
+planning_plugin: ompl_interface/OMPLPlanner
+request_adapters: >-
+  default_planner_request_adapters/AddTimeOptimalParameterization
+  default_planner_request_adapters/FixWorkspaceBounds
+  default_planner_request_adapters/FixStartStateBounds
+  default_planner_request_adapters/FixStartStateCollision
+  default_planner_request_adapters/FixStartStatePathConstraints
+start_state_max_bounds_error: 0.1
+
+# Time parameterization settings (TOTG)
+# Note: Actual S-curve smoothing is done in hardware layer
+totg:
+  path_tolerance: 0.1      # Path deviation tolerance
+  resample_dt: 0.01        # Resample time step (100Hz)
+  min_angle_change: 0.001  # Minimum angle change threshold
+
+planner_configs:
+  RRTConnect:
+    type: geometric::RRTConnect
+    range: 0.0
+  RRT:
+    type: geometric::RRT
+    range: 0.0
+    goal_bias: 0.05
+  RRTstar:
+    type: geometric::RRTstar
+    range: 0.0
+    goal_bias: 0.05
+    delay_collision_checking: 1
+  PRM:
+    type: geometric::PRM
+    max_nearest_neighbors: 10
+  PRMstar:
+    type: geometric::PRMstar
+  LBTRRT:
+    type: geometric::LBTRRT
+    range: 0.0
+    goal_bias: 0.05
+    epsilon: 0.4
+  LazyPRM:
+    type: geometric::LazyPRM
+    range: 0.0
+  LazyPRMstar:
+    type: geometric::LazyPRMstar
+  SPARS:
+    type: geometric::SPARS
+    sparse_delta_fraction: 0.25
+    dense_delta_fraction: 0.001
+    max_failures: 1000
+  KPIECE:
+    type: geometric::KPIECE
+    range: 0.0
+    goal_bias: 0.05
+    border_fraction: 0.9
+    failed_expansion_score_factor: 0.5
+    min_valid_path_fraction: 0.5
+  BKPIECE:
+    type: geometric::BKPIECE
+    range: 0.0
+    border_fraction: 0.9
+    failed_expansion_score_factor: 0.5
+    min_valid_path_fraction: 0.5
+  EST:
+    type: geometric::EST
+    range: 0.0
+    goal_bias: 0.05
+  TRRT:
+    type: geometric::TRRT
+    range: 0.0
+    goal_bias: 0.05
+    max_states_failed: 10
+    temp_change_factor: 2.0
+    min_temperature: 10e-10
+    init_temperature: 10e-6
+    frountier_threshold: 0.0
+    frountierNodeRatio: 0.1
+
+arm:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - RRTConnect
+    - RRT
+    - RRTstar
+    - KPIECE
+    - BKPIECE
+    - EST
+    - PRM
+    - PRMstar
+    - TRRT
+  projection_evaluator: joints(L1_joint,L2_joint,L3_joint)
+  longest_valid_segment_fraction: 0.005
+

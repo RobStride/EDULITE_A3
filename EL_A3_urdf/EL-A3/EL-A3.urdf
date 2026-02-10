@@ -1,0 +1,637 @@
+<?xml version="1.0" ?>
+<!-- Generated using onshape-to-robot -->
+<!-- Onshape https://cad.onshape.com/documents/b9fb4e3c9ad889fee0effcbb/w/b159e5d9cfda6d924dd0d8ed/e/339b74478250018c423b323a -->
+<robot name="EL-A3">
+  <!-- Link l1_urdf_urdf_asm -->
+  <link name="l1_urdf_urdf_asm">
+    <inertial>
+      <origin xyz="-0.000473642 -3.66697e-05 -0.0209915" rpy="0 0 0"/>
+      <mass value="0.410786"/>
+      <inertia ixx="0.000243951" ixy="-2.931e-09" ixz="-2.71862e-06" iyy="0.000233462" iyz="5.03989e-07" izz="0.000256472"/>
+    </inertial>
+    <!-- Part rs00_l1 -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rs00_l1.stl"/>
+      </geometry>
+      <material name="rs00_l1_material">
+        <color rgba="0.972549 0.529412 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rs00_l1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part l1_base -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l1_base.stl"/>
+      </geometry>
+      <material name="l1_base_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l1_base.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link l1_link_urdf_asm -->
+  <link name="l1_link_urdf_asm">
+    <inertial>
+      <origin xyz="-0.00670261 -0.000377334 0.0342178" rpy="0 0 0"/>
+      <mass value="0.140779"/>
+      <inertia ixx="0.000189723" ixy="-1.61467e-06" ixz="1.97828e-05" iyy="0.000112632" iyz="3.73644e-06" izz="0.00016217"/>
+    </inertial>
+    <!-- Part l1_link_stop -->
+    <visual>
+      <origin xyz="2.26067e-18 -6.01079e-19 -0.0054" rpy="1.09476e-47 1.91584e-47 3.28429e-46"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l1_link_stop.stl"/>
+      </geometry>
+      <material name="l1_link_stop_material">
+        <color rgba="0.768627 0.886275 0.952941 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="2.26067e-18 -6.01079e-19 -0.0054" rpy="1.09476e-47 1.91584e-47 3.28429e-46"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l1_link_stop.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part l1_link_drv -->
+    <visual>
+      <origin xyz="0 1.06042e-18 -0.0054" rpy="1.09476e-47 1.91584e-47 3.28429e-46"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l1_link_drv.stl"/>
+      </geometry>
+      <material name="l1_link_drv_material">
+        <color rgba="0.768627 0.886275 0.952941 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 1.06042e-18 -0.0054" rpy="1.09476e-47 1.91584e-47 3.28429e-46"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l1_link_drv.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part l2_stop -->
+    <visual>
+      <origin xyz="-6.83039e-18 9.43921e-18 -0.0054" rpy="1.09476e-47 1.91584e-47 3.28429e-46"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l2_stop.stl"/>
+      </geometry>
+      <material name="l2_stop_material">
+        <color rgba="0.972549 0.529412 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-6.83039e-18 9.43921e-18 -0.0054" rpy="1.09476e-47 1.91584e-47 3.28429e-46"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l2_stop.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link l2_l3_urdf_asm -->
+  <link name="l2_l3_urdf_asm">
+    <inertial>
+      <origin xyz="0.095 -3.5032e-07 -0.000569607" rpy="0 0 0"/>
+      <mass value="0.83477"/>
+      <inertia ixx="0.000411892" ixy="-2.68928e-08" ixz="8.18489e-11" iyy="0.0070909" iyz="-4.27746e-09" izz="0.00710532"/>
+    </inertial>
+    <!-- Part mainlink_back -->
+    <visual>
+      <origin xyz="0.0176846 -0.066 0.0005" rpy="-1.5708 1.66533e-16 2.57612e-30"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/mainlink_back.stl"/>
+      </geometry>
+      <material name="mainlink_back_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0176846 -0.066 0.0005" rpy="-1.5708 1.66533e-16 2.57612e-30"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/mainlink_back.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part 6705 -->
+    <visual>
+      <origin xyz="0.0176846 -0.066 0.0005" rpy="-1.5708 1.66533e-16 2.57612e-30"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/6705.stl"/>
+      </geometry>
+      <material name="6705_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0176846 -0.066 0.0005" rpy="-1.5708 1.66533e-16 2.57612e-30"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/6705.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part rs00_l2 -->
+    <visual>
+      <origin xyz="0.0176846 -0.066 2.53896e-16" rpy="-1.5708 1.66533e-16 2.57612e-30"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rs00_l2.stl"/>
+      </geometry>
+      <material name="rs00_l2_material">
+        <color rgba="0.972549 0.529412 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0176846 -0.066 2.53896e-16" rpy="-1.5708 1.66533e-16 2.57612e-30"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rs00_l2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part mainlink_motor -->
+    <visual>
+      <origin xyz="0.0176846 -0.066 3.26755e-16" rpy="-1.5708 6.05072e-15 5.22665e-15"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/mainlink_motor.stl"/>
+      </geometry>
+      <material name="mainlink_motor_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0176846 -0.066 3.26755e-16" rpy="-1.5708 6.05072e-15 5.22665e-15"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/mainlink_motor.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part 6705_2 -->
+    <visual>
+      <origin xyz="0.0176846 -0.066 0.0005" rpy="-1.5708 1.66533e-16 2.57612e-30"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/6705__2.stl"/>
+      </geometry>
+      <material name="6705_2_material">
+        <color rgba="0.231373 0.380392 0.705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0176846 -0.066 0.0005" rpy="-1.5708 1.66533e-16 2.57612e-30"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/6705__2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part rs00_l3 -->
+    <visual>
+      <origin xyz="0.0176846 -0.066 2.78182e-16" rpy="-1.5708 7.99361e-15 4.04823e-15"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rs00_l3.stl"/>
+      </geometry>
+      <material name="rs00_l3_material">
+        <color rgba="0.972549 0.529412 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0176846 -0.066 2.78182e-16" rpy="-1.5708 7.99361e-15 4.04823e-15"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rs00_l3.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link l3_lnik_urdf_asm -->
+  <link name="l3_lnik_urdf_asm">
+    <inertial>
+      <origin xyz="-0.055871 0.0492802 0.0027754" rpy="0 0 0"/>
+      <mass value="0.197637"/>
+      <inertia ixx="0.000241191" ixy="0.000108757" ixz="-7.09292e-06" iyy="0.000663739" iyz="6.85788e-06" izz="0.000641507"/>
+    </inertial>
+    <!-- Part l4_link_back -->
+    <visual>
+      <origin xyz="-0.172315 -0.066 -3.46945e-18" rpy="-1.5708 5.55112e-16 -5.55112e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l4_link_back.stl"/>
+      </geometry>
+      <material name="l4_link_back_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.172315 -0.066 -3.46945e-18" rpy="-1.5708 5.55112e-16 -5.55112e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l4_link_back.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part l4_link_drv -->
+    <visual>
+      <origin xyz="-0.172315 -0.066 -3.46945e-18" rpy="-1.5708 1.43837e-31 -2.87116e-31"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l4_link_drv.stl"/>
+      </geometry>
+      <material name="l4_link_drv_material">
+        <color rgba="0.301961 0.301961 0.301961 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.172315 -0.066 -3.46945e-18" rpy="-1.5708 1.43837e-31 -2.87116e-31"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l4_link_drv.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link l4_l5_urdf_asm -->
+  <link name="l4_l5_urdf_asm">
+    <inertial>
+      <origin xyz="-0.0242557 0.0305328 -0.000278918" rpy="0 0 0"/>
+      <mass value="0.46061"/>
+      <inertia ixx="0.000570996" ixy="0.000329291" ixz="3.22513e-06" iyy="0.000412235" iyz="-4.05021e-06" izz="0.000827873"/>
+    </inertial>
+    <!-- Part el05_l5 -->
+    <visual>
+      <origin xyz="-0.0223154 -0.126 2.45554e-16" rpy="-1.5708 -2.77556e-16 -2.22399e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/el05_l5.stl"/>
+      </geometry>
+      <material name="el05_l5_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0223154 -0.126 2.45554e-16" rpy="-1.5708 -2.77556e-16 -2.22399e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/el05_l5.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part l4_l5_link_back -->
+    <visual>
+      <origin xyz="-0.0223154 -0.126 3.01066e-16" rpy="-1.5708 -2.77556e-16 -2.22399e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l4_l5_link_back.stl"/>
+      </geometry>
+      <material name="l4_l5_link_back_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0223154 -0.126 3.01066e-16" rpy="-1.5708 -2.77556e-16 -2.22399e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l4_l5_link_back.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part l5_shake -->
+    <visual>
+      <origin xyz="-0.0223154 -0.126 3.01066e-16" rpy="-1.5708 -2.77556e-16 -2.22399e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l5_shake.stl"/>
+      </geometry>
+      <material name="l5_shake_material">
+        <color rgba="0.768627 0.886275 0.952941 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0223154 -0.126 3.01066e-16" rpy="-1.5708 -2.77556e-16 -2.22399e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l5_shake.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part l4_l5_link_back_2 -->
+    <visual>
+      <origin xyz="-0.0223154 -0.126 2.45554e-16" rpy="-1.5708 -2.77556e-16 -2.22399e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l4_l5_link_back__2.stl"/>
+      </geometry>
+      <material name="l4_l5_link_back_2_material">
+        <color rgba="0.972549 0.529412 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0223154 -0.126 2.45554e-16" rpy="-1.5708 -2.77556e-16 -2.22399e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/l4_l5_link_back__2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part el05_l4 -->
+    <visual>
+      <origin xyz="-0.0223154 -0.126 2.87188e-16" rpy="-1.5708 9.43028e-33 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/el05_l4.stl"/>
+      </geometry>
+      <material name="el05_l4_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0223154 -0.126 2.87188e-16" rpy="-1.5708 9.43028e-33 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/el05_l4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link part_9 -->
+  <link name="part_9">
+    <inertial>
+      <origin xyz="0.00409925 -1.0722e-09 0.0175115" rpy="0 0 0"/>
+      <mass value="0.0179604"/>
+      <inertia ixx="5.21557e-06" ixy="1.22247e-12" ixz="-1.22439e-06" iyy="5.09769e-06" iyz="2.3586e-12" izz="2.51483e-06"/>
+    </inertial>
+    <!-- Part part_9 -->
+    <visual>
+      <origin xyz="0.0268846 -2.5078e-16 0.164" rpy="3.14159 -0 -3.26817e-31"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/part_9.stl"/>
+      </geometry>
+      <material name="part_9_material">
+        <color rgba="0.972549 0.529412 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0268846 -2.5078e-16 0.164" rpy="3.14159 -0 -3.26817e-31"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/part_9.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link l5_l6_urdf_asm -->
+  <link name="l5_l6_urdf_asm">
+    <inertial>
+      <origin xyz="-1.18731e-05 -0.000611886 0.0702025" rpy="0 0 0"/>
+      <mass value="0.53126"/>
+      <inertia ixx="0.00100377" ixy="4.96962e-06" ixz="-1.08455e-07" iyy="0.00139938" iyz="1.67389e-05" izz="0.000542"/>
+    </inertial>
+    <!-- Part part_2 -->
+    <visual>
+      <origin xyz="-9.66421e-16 -1.58207e-15 0.062" rpy="8.13782e-16 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/part_2.stl"/>
+      </geometry>
+      <material name="part_2_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-9.66421e-16 -1.58207e-15 0.062" rpy="8.13782e-16 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/part_2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part hand_r -->
+    <visual>
+      <origin xyz="7.53017e-05 -2.08167e-15 0.0755" rpy="-3.36122e-15 -2.77556e-16 -8.87069e-18"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/hand_r.stl"/>
+      </geometry>
+      <material name="hand_r_material">
+        <color rgba="0.231373 0.380392 0.705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="7.53017e-05 -2.08167e-15 0.0755" rpy="-3.36122e-15 -2.77556e-16 -8.87069e-18"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/hand_r.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part el05 -->
+    <visual>
+      <origin xyz="-1.08051e-15 -2.19269e-15 0.0755" rpy="1.86179e-16 -5.55112e-17 1.57663e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/el05.stl"/>
+      </geometry>
+      <material name="el05_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.08051e-15 -2.19269e-15 0.0755" rpy="1.86179e-16 -5.55112e-17 1.57663e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/el05.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part rack__30_teeth -->
+    <visual>
+      <origin xyz="7.53017e-05 -1.97065e-15 0.0755" rpy="1.48303e-16 -5.55112e-16 -1.19893e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rack__30_teeth.stl"/>
+      </geometry>
+      <material name="rack__30_teeth_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="7.53017e-05 -1.97065e-15 0.0755" rpy="1.48303e-16 -5.55112e-16 -1.19893e-16"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rack__30_teeth.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part manifold_solid_brep_39_1 -->
+    <visual>
+      <origin xyz="0.003 -2.27596e-15 0.0755" rpy="4.99255e-16 -4.44089e-16 -9.21374e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/manifold_solid_brep_39_1.stl"/>
+      </geometry>
+      <material name="manifold_solid_brep_39_1_material">
+        <color rgba="0.980392 0.713725 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.003 -2.27596e-15 0.0755" rpy="4.99255e-16 -4.44089e-16 -9.21374e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/manifold_solid_brep_39_1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part rack__30_teeth_2 -->
+    <visual>
+      <origin xyz="-7.53017e-05 -2.41474e-15 0.0755" rpy="-1.7417e-16 -2.22045e-16 -6.43818e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rack__30_teeth__2.stl"/>
+      </geometry>
+      <material name="rack__30_teeth_2_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-7.53017e-05 -2.41474e-15 0.0755" rpy="-1.7417e-16 -2.22045e-16 -6.43818e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rack__30_teeth__2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part manifold_solid_brep_39_1_2 -->
+    <visual>
+      <origin xyz="-0.003 -2.10942e-15 0.0755" rpy="4.99255e-16 -4.44089e-16 -9.21374e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/manifold_solid_brep_39_1__2.stl"/>
+      </geometry>
+      <material name="manifold_solid_brep_39_1_2_material">
+        <color rgba="0.980392 0.713725 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.003 -2.10942e-15 0.0755" rpy="4.99255e-16 -4.44089e-16 -9.21374e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/manifold_solid_brep_39_1__2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part rack_base -->
+    <visual>
+      <origin xyz="-1.10827e-15 -2.19269e-15 0.0755" rpy="2.24151e-16 -1.66533e-16 4.66405e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rack_base.stl"/>
+      </geometry>
+      <material name="rack_base_material">
+        <color rgba="0.768627 0.886275 0.952941 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.10827e-15 -2.19269e-15 0.0755" rpy="2.24151e-16 -1.66533e-16 4.66405e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rack_base.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part rack_str -->
+    <visual>
+      <origin xyz="-1.10827e-15 -2.19269e-15 0.0755" rpy="2.24151e-16 -1.66533e-16 4.66405e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rack_str.stl"/>
+      </geometry>
+      <material name="rack_str_material">
+        <color rgba="0.768627 0.886275 0.952941 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.10827e-15 -2.19269e-15 0.0755" rpy="2.24151e-16 -1.66533e-16 4.66405e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/rack_str.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part part_1 -->
+    <visual>
+      <origin xyz="-9.45604e-16 -1.58207e-15 0.062" rpy="8.13782e-16 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/part_1.stl"/>
+      </geometry>
+      <material name="part_1_material">
+        <color rgba="0.615686 0.811765 0.929412 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-9.45604e-16 -1.58207e-15 0.062" rpy="8.13782e-16 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/part_1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part el05_2 -->
+    <visual>
+      <origin xyz="-1.69309e-18 -2.77556e-17 0.0305" rpy="3.14159 -4.59176e-29 7.4396e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/el05.stl"/>
+      </geometry>
+      <material name="el05_2_material">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.69309e-18 -2.77556e-17 0.0305" rpy="3.14159 -4.59176e-29 7.4396e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/el05.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part spur_gear__14_teeth -->
+    <visual>
+      <origin xyz="-1.95241e-14 6.245e-15 0.0755" rpy="2.24151e-16 -1.66533e-16 4.66405e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/spur_gear__14_teeth.stl"/>
+      </geometry>
+      <material name="spur_gear__14_teeth_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.95241e-14 6.245e-15 0.0755" rpy="2.24151e-16 -1.66533e-16 4.66405e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/spur_gear__14_teeth.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part part_15 -->
+    <visual>
+      <origin xyz="-7.53017e-05 -2.08167e-15 0.0755" rpy="-2.64982e-15 -5.55112e-17 -3.66263e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/part_15.stl"/>
+      </geometry>
+      <material name="part_15_material">
+        <color rgba="0.231373 0.380392 0.705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-7.53017e-05 -2.08167e-15 0.0755" rpy="-2.64982e-15 -5.55112e-17 -3.66263e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/part_15.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part manifold_solid_brep_40_1 -->
+    <visual>
+      <origin xyz="-1.10827e-15 -2.19269e-15 0.0755" rpy="4.99255e-16 -4.44089e-16 -9.21374e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/manifold_solid_brep_40_1.stl"/>
+      </geometry>
+      <material name="manifold_solid_brep_40_1_material">
+        <color rgba="0.498039 0.498039 0.498039 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.10827e-15 -2.19269e-15 0.0755" rpy="4.99255e-16 -4.44089e-16 -9.21374e-17"/>
+      <geometry>
+        <mesh filename="package://EL-A3/meshes/manifold_solid_brep_40_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from part_9 to l5_l6_urdf_asm -->
+  <joint name="L6_joint" type="revolute">
+    <origin xyz="0.00805 -2.43484e-16 0.038" rpy="1.5708 -0 -1.5708"/>
+    <parent link="part_9"/>
+    <child link="l5_l6_urdf_asm"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Joint from l4_l5_urdf_asm to part_9 -->
+  <joint name="L5_joint" type="revolute">
+    <origin xyz="-0.0492 0.038 5.21266e-16" rpy="1.5708 7.74027e-15 7.55994e-16"/>
+    <parent link="l4_l5_urdf_asm"/>
+    <child link="part_9"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Joint from l3_lnik_urdf_asm to l4_l5_urdf_asm -->
+  <joint name="L4_joint" type="revolute">
+    <origin xyz="-0.15 0.06 -3.01799e-16" rpy="-2.11956e-15 1.59132e-15 -3.33707e-16"/>
+    <parent link="l3_lnik_urdf_asm"/>
+    <child link="l4_l5_urdf_asm"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.5708" upper="1.5708"/>
+  </joint>
+  <!-- Joint from l2_l3_urdf_asm to l3_lnik_urdf_asm -->
+  <joint name="L3_joint" type="revolute">
+    <origin xyz="0.19 6.66134e-16 -1.00745e-15" rpy="2.11956e-15 -1.67106e-15 4.38194e-15"/>
+    <parent link="l2_l3_urdf_asm"/>
+    <child link="l3_lnik_urdf_asm"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-4.01426" upper="4.44089e-15"/>
+  </joint>
+  <!-- Joint from l1_link_urdf_asm to l2_l3_urdf_asm -->
+  <joint name="L2_joint" type="revolute">
+    <origin xyz="-0.0176846 -2.40902e-18 0.0606" rpy="1.5708 1.91584e-47 3.28429e-46"/>
+    <parent link="l1_link_urdf_asm"/>
+    <child link="l2_l3_urdf_asm"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0" upper="3.66519"/>
+  </joint>
+  <!-- Joint from l1_urdf_urdf_asm to l1_link_urdf_asm -->
+  <joint name="L1_joint" type="revolute">
+    <origin xyz="8.12654e-35 1.92593e-34 0.0054" rpy="-4.43734e-31 -2.83497e-31 -5.55112e-17"/>
+    <parent link="l1_urdf_urdf_asm"/>
+    <child link="l1_link_urdf_asm"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-2.79253" upper="2.79253"/>
+  </joint>
+</robot>

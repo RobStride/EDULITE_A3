@@ -1,0 +1,63 @@
+# Joy-Con IMU teleoperation parameter configuration
+
+joycon_imu_teleop_node:
+  ros__parameters:
+    # ==================== IMU Parameters ====================
+    # Sample rate (Hz)
+    sample_rate: 60.0
+    # Calibration sample count
+    calibration_samples: 200
+    # Calibration timeout (seconds)
+    calibration_timeout: 5.0
+    
+    # ==================== Filter Parameters ====================
+    # Filter type: "madgwick" or "complementary"
+    filter_type: "madgwick"
+    # Madgwick algorithm gain (0.01-0.5)
+    # Higher value: faster convergence, more noise
+    # Lower value: slower convergence, smoother
+    madgwick_beta: 0.1
+    # Gyroscope low-pass filter coefficient (0-1)
+    # Higher value: closer to raw value, faster response
+    # Lower value: smoother, slower response
+    lowpass_alpha_gyro: 0.8
+    # Accelerometer low-pass filter coefficient (0-1)
+    lowpass_alpha_accel: 0.5
+    
+    # ==================== Control Parameters ====================
+    # Control loop rate (Hz)
+    update_rate: 50.0
+    # Translation scale factor (m per rad per update)
+    # Controls mapping from IMU tilt angle to end-effector movement distance
+    translation_scale: 0.002
+    # Rotation scale factor (rad per rad per update)
+    rotation_scale: 0.02
+    # Z-axis movement scale factor (m per trigger per update)
+    z_scale: 0.003
+    # Deadzone (rad, ~3 degrees)
+    deadzone: 0.05
+    
+    # ==================== Kinematics Parameters ====================
+    planning_group: "arm"
+    base_frame: "base_link"
+    end_effector_frame: "end_effector"
+    
+    # ==================== Debug Parameters ====================
+    debug_mode: false
+
+
+# ==================== Joy Node Parameters ====================
+# Joy-Con controller needs joy node to publish button data
+joy_node:
+  ros__parameters:
+    # Device path (usually /dev/input/js0 or js1)
+    device_name: ""
+    device_id: 0
+    # Deadzone
+    deadzone: 0.1
+    # Auto-repeat rate (Hz)
+    autorepeat_rate: 20.0
+    # Sticky buttons
+    sticky_buttons: false
+    # Force feedback
+    coalesce_interval_ms: 1

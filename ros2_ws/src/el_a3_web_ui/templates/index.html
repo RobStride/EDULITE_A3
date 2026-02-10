@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EL-A3 机械臂控制系统</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- ES Module Import Map for Three.js -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+        }
+    }
+    </script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>EL-A3 机械臂控制系统</h1>
+                <span class="version">Web UI v1.0</span>
+            </div>
+            <div class="header-right">
+                <div class="connection-status" id="connectionStatus">
+                    <span class="status-dot disconnected"></span>
+                    <span class="status-text">未连接</span>
+                </div>
+                <button class="btn btn-success" id="enableMotorsBtn">
+                    <span class="icon">⚡</span> <span class="btn-text">使能电机</span>
+                </button>
+                <button class="btn btn-danger" id="emergencyStopBtn">
+                    <span class="icon">⚠</span> 紧急停止
+                </button>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel: 3D Viewer -->
+            <section class="panel panel-3d">
+                <div class="panel-header">
+                    <h2>3D 模型视图</h2>
+                    <div class="panel-controls">
+                        <button class="btn btn-small" id="resetViewBtn" title="重置视角">
+                            <span class="icon">🎯</span>
+                        </button>
+                        <button class="btn btn-small" id="toggleGridBtn" title="显示/隐藏网格">
+                            <span class="icon">▦</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-content" id="viewer3d">
+                    <div class="loading-overlay" id="viewerLoading">
+                        <div class="spinner"></div>
+                        <span>加载模型中...</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Right Panel: Controls & Status -->
+            <aside class="panel panel-controls">
+                <!-- Tabs -->
+                <div class="tab-bar">
+                    <button class="tab-btn active" data-tab="status">状态监控</button>
+                    <button class="tab-btn" data-tab="control">关节控制</button>
+                    <button class="tab-btn" data-tab="params">参数设置</button>
+                    <button class="tab-btn" data-tab="logs">日志</button>
+                </div>
+                
+                <!-- Tab Content: Status -->
+                <div class="tab-content active" id="tab-status">
+                    <div class="section">
+                        <h3>关节状态</h3>
+                        <table class="state-table" id="jointStateTable">
+                            <thead>
+                                <tr>
+                                    <th>关节</th>
+                                    <th>位置 (°)</th>
+                                    <th>速度</th>
+                                    <th>力矩</th>
+                                    <th>温度 (°C)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>L1</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+                                <tr><td>L2</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+                                <tr><td>L3</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+                                <tr><td>L4</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+                                <tr><td>L5</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+                                <tr><td>L6</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>电机温度曲线</h3>
+                        <div class="chart-container">
+                            <canvas id="temperatureChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>力矩曲线</h3>
+                        <div class="chart-container">
+                            <canvas id="effortChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab Content: Control -->
+                <div class="tab-content" id="tab-control">
+                    <div class="section">
+                        <h3>关节控制</h3>
+                        <div class="joint-sliders" id="jointSliders">
+                            <!-- Sliders generated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>预设位姿</h3>
+                        <div class="preset-buttons">
+                            <button class="btn btn-primary" id="goHomeBtn">
+                                <span class="icon">🏠</span> 回原点
+                            </button>
+                            <button class="btn" id="preset1Btn">
+                                <span class="icon">📍</span> 预设位姿1
+                            </button>
+                            <button class="btn" id="preset2Btn">
+                                <span class="icon">📍</span> 预设位姿2
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>运动参数</h3>
+                        <div class="param-row">
+                            <label>运动时间 (秒)</label>
+                            <input type="number" id="motionDuration" value="2.0" min="0.5" max="10" step="0.5">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab Content: Parameters -->
+                <div class="tab-content" id="tab-params">
+                    <div class="section">
+                        <h3>控制模式</h3>
+                        <div class="toggle-row">
+                            <label>零力矩模式</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="zeroTorqueToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-hint">启用后可手动拖动机械臂</span>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>手柄控制</h3>
+                        <div class="toggle-row">
+                            <label>Xbox手柄遥操作</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="teleopToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="teleop-status" id="teleopStatus">
+                            <span class="status-indicator stopped"></span>
+                            <span>状态: 未启动</span>
+                        </div>
+                        <div class="teleop-help">
+                            <p><strong>控制映射:</strong></p>
+                            <ul>
+                                <li>左摇杆: X/Y平移</li>
+                                <li>LT/RT: Z平移</li>
+                                <li>右摇杆: Yaw/Roll</li>
+                                <li>LB/RB: Pitch</li>
+                                <li>A键: 切换速度档位</li>
+                                <li>B键: 回Home位置</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>CAN接口配置</h3>
+                        <div class="param-row">
+                            <label>CAN接口</label>
+                            <select id="canInterfaceSelect">
+                                <option value="can0">can0</option>
+                            </select>
+                        </div>
+                        <button class="btn" id="applyCanBtn">
+                            <span class="icon">🔄</span> 应用并重启
+                        </button>
+                        <p class="hint warning">警告: 切换CAN接口将重启硬件驱动，机械臂会短暂失控</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>PID 参数</h3>
+                        <div class="param-row">
+                            <label>位置环 Kp</label>
+                            <input type="number" id="paramKp" value="80" min="0" max="500" step="5">
+                        </div>
+                        <div class="param-row">
+                            <label>速度环 Kd</label>
+                            <input type="number" id="paramKd" value="4" min="0" max="10" step="0.5">
+                        </div>
+                        <p class="hint">注: PID参数修改需要重启控制器生效</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>重力补偿</h3>
+                        <div class="param-row">
+                            <label>补偿比例 (%)</label>
+                            <input type="number" id="gravityRatio" value="50" min="0" max="100" step="5">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab Content: Logs -->
+                <div class="tab-content" id="tab-logs">
+                    <div class="section">
+                        <div class="log-controls">
+                            <button class="btn btn-small" id="clearLogsBtn">清除日志</button>
+                            <button class="btn btn-small" id="exportLogsBtn">导出日志</button>
+                        </div>
+                        <div class="log-container" id="logContainer">
+                            <!-- Logs will be added here -->
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <span>EL-A3 Robot Arm | Web Control Interface</span>
+            <span id="updateRate">更新频率: -- Hz</span>
+        </footer>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="/static/js/app.js"></script>
+    <script type="module" src="/static/js/robot_viewer.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <script src="/static/js/control_panel.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# EL-A3 master-slave teleoperation configuration file
+# Supports one-to-one, one-to-many, and many-to-many mapping modes
+# Supports 6-axis robot arm + gripper (L7) for 7-joint control
+
+# Global settings
+rate: 50.0                    # Control rate Hz
+
+# Master-slave mapping configuration
+# Supports multiple mapping groups, each can be one-to-one or one-to-many
+mappings:
+  # Mapping 1: arm1 (can0) master -> arm4 (can3) slave
+  - master: "arm1"            # Master arm namespace (can0)
+    slaves: ["arm4"]          # Slave arm namespace list (can3)
+    scale: 1.0                # Position scale ratio
+    mirror: false             # Whether to mirror (left-right symmetry)
+    joint_offset: [0, 0, 0, 0, 0, 0, 0]  # Joint offsets (rad), 7 joints
+    include_gripper: true     # Whether to include gripper (L7) following
+    joint_count: 7            # Number of joints (6 or 7)
+    enabled: true             # Whether this mapping is enabled
+
+  # Mapping 2: arm2 (can1) master -> arm3 (can2) slave
+  - master: "arm2"            # Master arm namespace (can1)
+    slaves: ["arm3"]          # Slave arm namespace list (can2)
+    scale: 1.0
+    mirror: false
+    joint_offset: [0, 0, 0, 0, 0, 0, 0]
+    include_gripper: true
+    joint_count: 7
+    enabled: true
+
+# Safety settings
+safety:
+  max_velocity: 15.0          # Max velocity limit rad/s (increased to allow fast following)
+  position_tolerance: 0.5     # Position following tolerance rad (stops following if exceeded)
+  velocity_tolerance: 1.0     # Velocity tolerance rad/s
+  enable_collision_check: false  # Whether to enable collision detection (requires MoveIt)
+
+# Master arm settings
+master:
+  use_zero_torque_mode: true  # Whether master arm uses zero-torque mode (teach by dragging)
+  pure_zero_torque: false     # false = use zero-torque mode with gravity compensation (for teach by dragging)
+                              # true = use pure zero-torque mode (Kp=0, Kd=0, torque=0)
+  enable_gravity_comp: true   # Whether to enable gravity compensation
+
+# Slave arm settings
+slave:
+  trajectory_duration: 0.02   # Trajectory execution time (seconds) - reduced for faster response
+  use_streaming: true         # Use streaming control instead of Action goals

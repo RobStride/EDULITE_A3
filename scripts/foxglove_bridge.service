@@ -1,0 +1,14 @@
+[Unit]
+Description=Foxglove Bridge for ROS2
+After=network.target
+
+[Service]
+Type=simple
+User=wy
+Environment="ROS_DOMAIN_ID=0"
+ExecStart=/bin/bash -c 'source /opt/ros/humble/setup.bash && ros2 run foxglove_bridge foxglove_bridge --ros-args -p port:=8765'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

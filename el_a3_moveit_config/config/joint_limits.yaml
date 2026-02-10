@@ -1,0 +1,73 @@
+# Joint limits for EL-A3 robot arm (Updated for EDULITE-A3)
+# Based on motor specifications: RS00 (joints 1-3), EL05 (joints 4-6)
+# 
+# Note: Jerk limits are defined here for compatibility, but the actual S-curve
+# smoothing is performed in the hardware interface layer (el_a3_hardware) which
+# implements a standard 7-segment S-curve trajectory generator.
+
+joint_limits:
+  L1_joint:
+    has_velocity_limits: true
+    max_velocity: 33.0  # RS00: 33 rad/s
+    has_acceleration_limits: true
+    max_acceleration: 20.0
+    has_jerk_limits: true
+    max_jerk: 50.0  # S-curve jerk limit (rad/s³)
+    has_position_limits: true
+    min_position: -2.79253
+    max_position: 2.79253
+    
+  L2_joint:
+    has_velocity_limits: true
+    max_velocity: 33.0  # RS00: 33 rad/s
+    has_acceleration_limits: true
+    max_acceleration: 20.0
+    has_jerk_limits: true
+    max_jerk: 50.0
+    has_position_limits: true
+    min_position: 0.0
+    max_position: 3.66519
+    
+  L3_joint:
+    has_velocity_limits: true
+    max_velocity: 33.0  # RS00: 33 rad/s
+    has_acceleration_limits: true
+    max_acceleration: 20.0
+    has_jerk_limits: true
+    max_jerk: 50.0
+    has_position_limits: true
+    min_position: -4.01426
+    max_position: 0.0
+    
+  L4_joint:
+    has_velocity_limits: true
+    max_velocity: 50.0  # EL05: 50 rad/s
+    has_acceleration_limits: true
+    max_acceleration: 30.0
+    has_jerk_limits: true
+    max_jerk: 80.0  # Higher jerk for lighter joints
+    has_position_limits: true
+    min_position: -1.5708
+    max_position: 1.5708
+    
+  L5_joint:
+    has_velocity_limits: true
+    max_velocity: 50.0  # EL05: 50 rad/s
+    has_acceleration_limits: true
+    max_acceleration: 30.0
+    has_jerk_limits: true
+    max_jerk: 80.0
+    has_position_limits: true
+    min_position: -1.5708
+    max_position: 1.5708
+    
+  L6_joint:
+    has_velocity_limits: true
+    max_velocity: 50.0  # EL05: 50 rad/s
+    has_acceleration_limits: true
+    max_acceleration: 30.0
+    has_jerk_limits: true
+    max_jerk: 80.0
+    has_position_limits: true
+    min_position: -1.5708
+    max_position: 1.5708

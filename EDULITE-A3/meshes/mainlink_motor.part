@@ -1,0 +1,13 @@
+{
+    "configuration": "default",
+    "documentId": "2139d6249ad18a0629ecd155",
+    "documentMicroversion": "a3383b9a4e2bf6f4fa8c3572",
+    "elementId": "8dc2d89cb0900fb11c2914c4",
+    "fullConfiguration": "default",
+    "id": "MS/MbfhSAGsmnGlcM",
+    "isStandardContent": false,
+    "name": "MAINLINK_MOTOR <1>",
+    "partId": "R3DH",
+    "suppressed": false,
+    "type": "Part"
+}

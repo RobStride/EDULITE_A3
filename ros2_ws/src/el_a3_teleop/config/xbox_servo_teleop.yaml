@@ -1,0 +1,21 @@
+# Xbox controller servo control parameter configuration
+
+xbox_servo_teleop_node:
+  ros__parameters:
+    # Linear velocity scale factor (m/s)
+    # Maximum speed when joystick is fully pushed
+    linear_scale: 0.1
+    
+    # Angular velocity scale factor (rad/s)
+    # Maximum angular speed when joystick is fully pushed
+    angular_scale: 0.5
+    
+    # Coordinate frames
+    base_frame: "base_link"
+    
+    # Joystick deadzone (0-1)
+    deadzone: 0.1
+
+
+
+

@@ -1,0 +1,57 @@
+# ros2_control controller configuration for EL-A3 robot arm
+
+controller_manager:
+  ros__parameters:
+    update_rate: 200  # Hz - Increased to 200Hz for smoother control
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+arm_controller:
+  ros__parameters:
+    joints:
+      - L1_joint
+      - L2_joint
+      - L3_joint
+      - L4_joint
+      - L5_joint
+      - L6_joint
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+      - velocity
+
+    # Open-loop control - ignores feedback position, eliminates command jitter caused by feedback noise
+    # Underlying motor drivers still have closed-loop PID control, preventing runaway
+    open_loop_control: true
+    allow_nonzero_velocity_at_trajectory_end: true  # Allow non-zero velocity at trajectory end for smoother motion
+    
+    # Trajectory interpolation settings - use spline interpolation for smoother motion
+    interpolation_method: splines
+    
+    # Publish rate settings
+    state_publish_rate: 200.0   # State publish rate (Hz)
+    action_monitor_rate: 50.0   # Action monitor rate (Hz)
+    
+    # Goal tolerance settings - relaxed tolerance to reduce jitter
+    constraints:
+      stopped_velocity_tolerance: 0.1  # rad/s - Relaxed velocity tolerance
+      goal_time: 0.0  # 0 = don't check time, only check position
+      L1_joint:
+        goal: 0.03  # rad position tolerance - relaxed
+      L2_joint:
+        goal: 0.03
+      L3_joint:
+        goal: 0.03
+      L4_joint:
+        goal: 0.03
+      L5_joint:
+        goal: 0.03
+      L6_joint:
+        goal: 0.03

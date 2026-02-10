@@ -1,0 +1,35 @@
+# EL-A3 multi-arm configuration file
+# Defines CAN interface, namespace, and other parameters for each robot arm
+
+# Robot arm list
+arms:
+  arm1:
+    prefix: "arm1_"           # Namespace prefix
+    can_interface: "can0"     # CAN interface
+    host_can_id: 253          # Host CAN ID (0xFD)
+    enabled: true             # Whether enabled
+    
+  arm2:
+    prefix: "arm2_"
+    can_interface: "can1"
+    host_can_id: 253
+    enabled: true
+    inertia_config_path: "/home/wy/RS/A3/el_a3_description/config/inertia_params_arm2.yaml"
+    
+  arm3:
+    prefix: "arm3_"
+    can_interface: "can2"
+    host_can_id: 253
+    enabled: false            # Disabled (no hardware connected)
+    
+  arm4:
+    prefix: "arm4_"
+    can_interface: "can3"
+    host_can_id: 253
+    enabled: false            # Disabled (no hardware connected)
+
+# Global settings
+global:
+  update_rate: 200            # Controller update rate Hz
+  use_mock_hardware: false    # Whether to use mock hardware
+  use_rviz: true              # Whether to launch RViz

@@ -1,0 +1,63 @@
+# Xbox controller parameter configuration
+
+xbox_teleop_node:
+  ros__parameters:
+    # Update rate (Hz) - 50Hz for faster response
+    update_rate: 50.0
+    
+    # Use fast IK mode (true=50Hz IK direct control, false=traditional path planning)
+    # Fast IK mode: calls IK service each frame to compute joint positions, publishes directly to controller, achieving true 50Hz
+    # Traditional mode: uses GetCartesianPath service for full path planning, actual rate ~5-10Hz
+    use_fast_ik_mode: true
+    
+    # ============ Cartesian velocity parameters (physical units) ============
+    # Joystick displacement maps directly to end-effector velocity, releasing joystick immediately zeroes velocity
+    max_linear_velocity: 0.15      # Max linear velocity m/s (end-effector speed at full stick)
+    max_angular_velocity: 1.5      # Max angular velocity rad/s (end-effector rotation speed at full stick)
+    
+    # ============ Joint output smoothing parameters ============
+    # Smooth IK-solved joint positions to prevent joint jumps
+    joint_smoothing_alpha: 0.15    # Joint smoothing factor (0-1), smaller = smoother but slower response
+    max_joint_velocity: 1.5        # Max single joint velocity limit rad/s (prevents excessive joint speed)
+    max_joint_acceleration: 5.0    # Max single joint acceleration limit rad/s² (prevents acceleration spikes)
+    
+    # ============ Input smoothing parameters ============
+    # Smooth joystick input filtering (optional, independent from joint smoothing)
+    input_smoothing_factor: 0.3    # Input smoothing factor (0-1), smaller = smoother
+    
+    # ============ Singularity protection parameters ============
+    # Detect and reject IK solution jumps to prevent violent motion near singularities
+    max_ik_jump_threshold: 0.5     # Max allowed single joint jump rad (IK solution rejected if exceeded)
+    singularity_warning_count: 5   # Warning issued when consecutive rejections exceed this count
+    
+    # ============ Collision detection parameters ============
+    # Enable collision detection after initial move to home position
+    enable_collision_check: true   # Whether to enable collision detection after initialization
+    
+    # ============ Other parameters ============
+    # MoveIt planning group name
+    planning_group: "arm"
+    
+    # Coordinate frames
+    base_frame: "base_link"
+    end_effector_frame: "end_effector"
+    
+    # Joystick deadzone (0-1)
+    # Lower deadzone for more responsive control while retaining basic anti-drift capability
+    deadzone: 0.15
+    
+    # Debug mode - show raw joystick input
+    debug_input: false
+    
+    # ============ Master-slave teleoperation parameters (triggered by Menu button) ============
+    # can0 is master arm (gravity compensation, manual drag), can1 is slave arm (real-time following)
+    # Requires multi_arm_control.launch.py to start dual-arm ROS2 control stack
+    master_slave_enabled: true
+    master_joint_state_topic: "/joint_states"
+    master_trajectory_topic: "/arm_controller/joint_trajectory"
+    master_zero_torque_service: "/el_a3/set_zero_torque_mode"
+    master_joint_prefix: ""
+    slave_joint_state_topic: "/arm2/joint_states"
+    slave_trajectory_topic: "/arm2/arm2_arm_controller/joint_trajectory"
+    slave_joint_prefix: "arm2_"
+    go_zero_duration: 3.0
