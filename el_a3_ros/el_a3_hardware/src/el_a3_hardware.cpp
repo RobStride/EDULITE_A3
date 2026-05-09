@@ -106,6 +106,7 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
   velocity_ff_stage2_.resize(num_joints, 0.0);         // 二阶滤波中间量
   vel_ma_buffer_.resize(num_joints, {0.0, 0.0, 0.0, 0.0});  // 4-sample MA circular buffer
   vel_ma_idx_.resize(num_joints, 0);                         // MA buffer write index
+  velocity_settle_counter_.resize(num_joints, 0);            // 速度稳定计数器
   velocity_filter_alpha_ = 0.3;                        // 速度滤波系数
   
   // 默认参数
@@ -642,8 +643,10 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_activate(
   for (size_t i = 0; i < joint_configs_.size(); ++i) {
     gravity_input_positions_[i] = initial_positions[i];
     last_cmd_positions_[i] = initial_positions[i];
+    last_hw_commands_positions_[i] = initial_positions[i];
     filtered_cmd_velocities_[i] = 0.0;
     velocity_ff_stage2_[i] = 0.0;
+    velocity_settle_counter_[i] = 0;
   }
 
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"), 
@@ -905,9 +908,10 @@ hardware_interface::return_type RsA3HardwareInterface::write(
       
       // Initialize velocity feedforward variables, avoid jump on first computation
       last_cmd_positions_[i] = hw_commands_positions_[i];
+      last_hw_commands_positions_[i] = hw_commands_positions_[i];
       filtered_cmd_velocities_[i] = 0.0;
       velocity_ff_stage2_[i] = 0.0;  // 2nd-order filter intermediate value
-      
+      velocity_settle_counter_[i] = 0;
     }
     first_command_ = false;
     RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
@@ -983,6 +987,33 @@ hardware_interface::return_type RsA3HardwareInterface::write(
 
       double cmd_velocity = std::clamp(ma_velocity, -velocity_limit_, velocity_limit_);
 
+      // ==== 轨迹结束/取消检测（双重判据）====
+      // 直接监测原始指令位置 hw_commands_positions_ 是否还在变化：
+      // arm_controller 一旦进入 hold 模式（轨迹完成/被取消），它会把同一个位置
+      // 反复发下来 → cmd_pos_delta 立刻为 0。这是比 cmd_velocity 更快的信号，
+      // 因为不依赖位置 EMA 的衰减。检测到后**立即**把两级 EMA 状态归零，
+      // 让 filtered_velocity 在 1 个周期内变 0，杜绝电机 Kd·v_ff 残余把关节
+      // 继续往原方向推（轨迹结束的"沉一下"根因）。
+      double cmd_pos_delta = std::abs(hw_commands_positions_[i] - last_hw_commands_positions_[i]);
+      last_hw_commands_positions_[i] = hw_commands_positions_[i];
+
+      constexpr double POS_DELTA_THRESHOLD = 1e-5;  // rad/cycle，<2e-3 rad/s 视为停
+      constexpr double VEL_THRESHOLD       = 0.02;  // rad/s
+      constexpr int    SETTLE_CYCLES       = 1;     // 1 周期 = 5ms 即触发
+
+      bool stopped = (cmd_pos_delta < POS_DELTA_THRESHOLD)
+                  || (std::abs(cmd_velocity) < VEL_THRESHOLD);
+
+      if (stopped) {
+        if (++velocity_settle_counter_[i] >= SETTLE_CYCLES) {
+          filtered_cmd_velocities_[i] = 0.0;
+          velocity_ff_stage2_[i]      = 0.0;
+          cmd_velocity                = 0.0;  // 同时把滤波器输入也清零
+        }
+      } else {
+        velocity_settle_counter_[i] = 0;
+      }
+
       // 2nd-order EMA filter
       double alpha1 = 0.18;
       double first_stage = alpha1 * cmd_velocity + (1.0 - alpha1) * filtered_cmd_velocities_[i];
@@ -997,6 +1028,11 @@ hardware_interface::return_type RsA3HardwareInterface::write(
       if (std::abs(velocity_change) > max_velocity_change) {
         filtered_velocity = velocity_ff_stage2_[i] +
                             max_velocity_change * (velocity_change > 0 ? 1.0 : -1.0);
+      }
+
+      // 兜底：检测到停止时强制 filtered_velocity 也归零，跳过加速度限幅可能造成的尾巴
+      if (stopped && velocity_settle_counter_[i] >= SETTLE_CYCLES) {
+        filtered_velocity = 0.0;
       }
     }
     
@@ -1014,7 +1050,7 @@ hardware_interface::return_type RsA3HardwareInterface::write(
     filtered_velocity = max_velocity_ff * std::tanh(filtered_velocity / max_velocity_ff);
     
     velocity_ff_stage2_[i] = filtered_velocity;
-    
+
     // Convert to motor coordinate frame velocity
     double motor_cmd_velocity = velocity_ff_stage2_[i] * config.direction;
     
@@ -1063,7 +1099,7 @@ hardware_interface::return_type RsA3HardwareInterface::write(
 
     double final_cmd_velocity = effort_mode_ ? 0.0 : motor_cmd_velocity;
     double motor_cmd_torque = cmd_torque * config.direction;
-    
+
     if (!can_driver_->sendMotionControl(
           config.motor_id,
           config.motor_type,
@@ -1400,9 +1436,13 @@ std::vector<double> RsA3HardwareInterface::computePinocchioGravity(
       if (!use_calibrated_inertia_ && i < inertia_scale_params_.size()) {
         scale = inertia_scale_params_[i].mass_scale;
       }
-      
-      // Apply joint direction (consistent with hardware interface)
-      gravity_torques[i] = tau[i] * scale * joint_configs_[i].direction;
+
+      // 返回 URDF/关节坐标系下的重力力矩（不在这里乘 direction）。
+      // direction 只在 write() 里把 cmd_torque 转换成电机坐标系时乘一次：
+      //   motor_cmd_torque = cmd_torque * direction
+      // 之前这里也乘了一次 direction，导致 direction=-1 的关节（L1/L3/L5）
+      // 重力前馈方向反向 —— 表现为机械臂在重力下方向上"被前馈拽下来"的下垂。
+      gravity_torques[i] = tau[i] * scale;
     }
     
   } catch (const std::exception& e) {

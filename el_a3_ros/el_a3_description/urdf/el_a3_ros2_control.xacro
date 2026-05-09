@@ -30,7 +30,7 @@
           <param name="smoothing_alpha">0.8</param>     <!-- Low-pass filter coefficient (0.8 = near-passthrough, teleop already smooths) -->
           
           <!-- Gravity compensation feedforward parameters (100% gravity as feedforward torque, matching zero-torque mode) -->
-          <param name="gravity_feedforward_ratio">0.0</param>  <!-- Gravity feedforward disabled -->
+          <param name="gravity_feedforward_ratio">1.0</param>  <!-- Gravity feedforward disabled -->
           
           <!-- Zero-torque mode parameters -->
           <param name="zero_torque_kd">0.3</param>  <!-- Fixed Kd fallback (used when adaptive_kd disabled) -->

@@ -145,6 +145,7 @@ private:
   std::vector<double> velocity_ff_stage2_;          // 二阶滤波中间量（最终发送的速度前馈）
   std::vector<std::array<double, 4>> vel_ma_buffer_; // 4-sample moving average circular buffer per joint
   std::vector<int> vel_ma_idx_;                       // circular buffer write index per joint
+  std::vector<int> velocity_settle_counter_;        // 指令速度稳定计数：连续 N 周期接近零时清零速度前馈，避免轨迹结束时残留 v_ff 把电机往原方向继续推（造成"沉一下"）
   double velocity_filter_alpha_;                    // 速度滤波系数 (0-1)
   double smoothing_alpha_;                          // 平滑系数 (0-1，越小越平滑)
   double max_velocity_;                             // 最大速度限制 (rad/s)

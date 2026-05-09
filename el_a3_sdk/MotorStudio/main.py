@@ -25,6 +25,9 @@ if not getattr(sys, "frozen", False):
 
 os.environ.setdefault("QT_API", "pyqt6")
 
+if sys.platform.startswith("linux"):
+    os.environ.setdefault("QT_QPA_PLATFORM", "xcb")
+
 
 def main():
     default_urdf = str(SDK_ROOT / "resources" / "urdf" / "el_a3.urdf")
