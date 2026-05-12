@@ -24,7 +24,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "el-a3-debugger=debugger.main:main",
+            "el-a3-debugger=MotorStudio.main:main",
         ],
     },
     classifiers=[

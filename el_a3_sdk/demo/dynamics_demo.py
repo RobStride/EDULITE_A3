@@ -57,20 +57,20 @@ def main():
 
     # 科氏力矩阵
     print(f"\n=== 科氏力矩阵 ===")
-    v = [0.1, 0.2, -0.1, 0.0, 0.0, 0.0]
+    v = [0.1, 0.2, -0.1, 0.0, 0.0, 0.0, 0.0]
     C = kin.coriolis_matrix(q_home, v)
     print(f"C(q,v) 形状: {C.shape}")
     print(f"C*v = {[f'{x:.4f}' for x in (C @ np.array(v))]}")
 
     # 逆动力学 (RNEA)
     print(f"\n=== 逆动力学 (RNEA) ===")
-    a = [0.5, 0.0, 0.0, 0.0, 0.0, 0.0]
+    a = [0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     tau = kin.inverse_dynamics(q_home, v, a)
     print(f"tau = M*a + C*v + g = {[f'{t:.4f}' for t in tau]} Nm")
 
     # 正动力学 (ABA)
     print(f"\n=== 正动力学 (ABA) ===")
-    a_result = kin.forward_dynamics(q_home, [0.0]*6, tau_g)
+    a_result = kin.forward_dynamics(q_home, [0.0]*7, tau_g)
     print(f"给定 tau=gravity: a = {[f'{x:.6f}' for x in a_result]} rad/s²")
     print("(应接近零，因为重力恰好被力矩平衡)")
 
