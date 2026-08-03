@@ -8,7 +8,8 @@ setup(
     packages=find_packages(),
     python_requires=">=3.8",
     install_requires=[
-        "numpy",
+        # ROS Humble 的 pinocchio 等二进制包基于 NumPy 1.x 编译，NumPy 2 会段错误
+        "numpy>=1.24,<2",
         "pyyaml",
     ],
     extras_require={
@@ -24,7 +25,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "el-a3-debugger=debugger.main:main",
+            "el-a3-debugger=MotorStudio.main:main",
         ],
     },
     classifiers=[

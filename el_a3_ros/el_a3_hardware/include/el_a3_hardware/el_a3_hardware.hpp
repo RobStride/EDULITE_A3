@@ -132,10 +132,9 @@ private:
   double position_kd_;
   double velocity_limit_;
   
-  // 位置指令平滑滤波（含速度/加速度/加加速度限制 - S 曲线规划）
+  // 位置指令平滑滤波（含速度/加速度限制）
   std::vector<double> smoothed_positions_;     // 平滑后位置指令
   std::vector<double> smoothed_velocities_;    // 平滑后速度（用于加速度限制）
-  std::vector<double> smoothed_accelerations_; // 平滑后加速度（用于 S 曲线规划）
   
   // 速度前馈计算
   std::vector<double> last_cmd_positions_;          // 上一周期指令位置（用于计算速度前馈）

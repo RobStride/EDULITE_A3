@@ -3,21 +3,38 @@
 笛卡尔位姿控制示例
 
 演示使用 SDK 的 EndPoseCtrl 和 MoveL 功能。
-需要 Pinocchio：pip install pin
+需要 Pinocchio: pip install pin
 """
 
 import os
 import time
+import math
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from el_a3_sdk import ELA3Interface, ArmEndPose
 
+# 零位（各关节 0 rad）
+HOME_POSITIONS = [0.0] * 6
+
+# 笛卡尔控制工作姿态：远离 J2/J3 限位和奇异构型，IK 才有收敛空间
+READY_POSITIONS = [math.radians(d) for d in [0, 45, -60, 0, 15, 0]]
+
 
 def main():
-    arm = ELA3Interface(can_name="can0", default_kp=80.0, default_kd=4.0)
+    arm = ELA3Interface(can_name="can1", default_kp=80.0, default_kd=4.0)
     arm.ConnectPort()
     arm.EnableArm()
+    time.sleep(0.5)
+
+    # 上电回零：从当前（可能下垂的）姿态平滑回到零位
+    print("--- 回零 ---")
+    arm.MoveJ(HOME_POSITIONS, duration=4.0)
+    time.sleep(0.5)
+
+    # 零位贴着 J2/J3 限位，不适合直接做笛卡尔运动，先抬到工作姿态
+    print("--- 移动到工作姿态 ---")
+    arm.MoveJ(READY_POSITIONS, duration=3.0)
     time.sleep(0.5)
 
     # 获取当前末端位姿
@@ -46,6 +63,11 @@ def main():
     J = arm.GetJacobian()
     print(f"Jacobian shape: {J.shape}")
     print(f"Jacobian:\n{J}")
+
+    # 回零后再断使能，避免从高处失能瘫落
+    print("\n--- 回零 ---")
+    arm.MoveJ(HOME_POSITIONS, duration=4.0)
+    time.sleep(0.5)
 
     arm.DisableArm()
     arm.DisconnectPort()

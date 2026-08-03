@@ -20,7 +20,7 @@ def deg2rad(d: float) -> float:
 
 
 def main():
-    arm = ELA3Interface(can_name="can0", logger_level=LogLevel.INFO)
+    arm = ELA3Interface(can_name="can1", logger_level=LogLevel.INFO)
 
     if not arm.ConnectPort():
         print("连接失败")

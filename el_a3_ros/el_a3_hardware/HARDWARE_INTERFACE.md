@@ -24,16 +24,14 @@ ros2_control SystemInterface 插件，通过 SocketCAN 与 Robstride 电机通�
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `smoothing_alpha` | 0.8 | EMA 低通滤波系数 (0=全保持, 1=直通)。S-curve 禁用时使用 |
+| `smoothing_alpha` | 0.8 | EMA 低通滤波系数 (0=全保持, 1=直通) |
 
-### 1.3 S-curve 轨迹规划参数（当前禁用）
+### 1.3 指令平滑限制参数
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `s_curve_enabled` | false | 启用七段式 S-curve 生成器（与 MoveIt 轨迹冲突，暂时禁用） |
 | `max_velocity` | 3.0 | 最大速度限制 (rad/s) |
 | `max_acceleration` | 15.0 | 最大加速度限制 (rad/s^2) |
-| `max_jerk` | 50.0 | 最大加加速度限制 (rad/s^3) |
 
 ### 1.4 重力补偿参数
 

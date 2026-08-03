@@ -1,12 +1,2 @@
----
-# Workspace = EDULITE_A3: colcon from el_a3_ros → el_a3_ros/build/el_a3_hardware/compile_commands.json
-If:
-  PathMatch: el_a3_ros/el_a3_hardware/.*\.(c|cc|cpp|cxx|h|hh|hpp|hxx)$
 CompileFlags:
-  CompilationDatabase: el_a3_ros/build/el_a3_hardware
----
-# Workspace = el_a3_ros only
-If:
-  PathMatch: el_a3_hardware/.*\.(c|cc|cpp|cxx|h|hh|hpp|hxx)$
-CompileFlags:
-  CompilationDatabase: build/el_a3_hardware
+  CompilationDatabase: build

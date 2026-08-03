@@ -36,8 +36,8 @@ RsA3HardwareInterface::RsA3HardwareInterface()
   , use_pinocchio_gravity_(false)
   , pinocchio_initialized_(false)
   , use_calibrated_inertia_(false)
-  , limit_margin_(0.15)          // 约在 ~15° 处开始减速（≈8.6°）
-  , limit_stop_margin_(0.02)     // 约在 ~1° 处硬停止（≈1.1°）
+  , limit_margin_(0.15)          // 约在 ~15° 处开始减速(≈8.6°)
+  , limit_stop_margin_(0.02)     // 约在 ~1° 处硬停止(≈1.1°)
   , limit_decel_factor_(0.3)     // 减速到 30%
   
 {
@@ -93,14 +93,13 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
   hw_commands_velocities_.resize(num_joints, 0.0);
   hw_commands_efforts_.resize(num_joints, 0.0);
   
-  // 初始化位置指令平滑滤波（含速度/加速度/加加速度限制 - S 曲线规划）
+  // 初始化位置指令平滑滤波(含速度/加速度限制)
   smoothed_positions_.resize(num_joints, 0.0);
   smoothed_velocities_.resize(num_joints, 0.0);
-  smoothed_accelerations_.resize(num_joints, 0.0);  // 用于 S 曲线规划
   
   // 初始化速度前馈相关变量
   last_cmd_positions_.resize(num_joints, 0.0);         // 上一周期指令位置
-  last_hw_commands_positions_.resize(num_joints, 0.0); // 上一帧 hw_commands（用于检测指令更新）
+  last_hw_commands_positions_.resize(num_joints, 0.0); // 上一帧 hw_commands(用于检测指令更新)
   cmd_velocities_.resize(num_joints, 0.0);             // 计算得到的指令速度
   filtered_cmd_velocities_.resize(num_joints, 0.0);    // 一阶滤波后的指令速度
   velocity_ff_stage2_.resize(num_joints, 0.0);         // 二阶滤波中间量
@@ -110,13 +109,13 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
   velocity_filter_alpha_ = 0.3;                        // 速度滤波系数
   
   // 默认参数
-  smoothing_alpha_ = 0.8;       // 平滑系数（0.8 = 近直通，teleop 层已有充分平滑）
+  smoothing_alpha_ = 0.8;       // 平滑系数(0.8 = 近直通,teleop 层已有充分平滑)
   max_velocity_ = 2.0;          // 最大速度 2 rad/s
   max_acceleration_ = 8.0;      // 最大加速度 8 rad/s²
   
   control_period_ = 0.005;      // 默认 200Hz -> 5ms
   first_command_ = true;
-  gravity_feedforward_ratio_ = 1.0;  // 默认 100% 重力补偿前馈（与零力矩模式一致）
+  gravity_feedforward_ratio_ = 1.0;  // 默认 100% 重力补偿前馈(与零力矩模式一致)
   
   
   // 从参数读取平滑系数
@@ -134,9 +133,6 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
   if (info_.hardware_parameters.count("max_acceleration")) {
     max_acceleration_ = std::stod(info_.hardware_parameters.at("max_acceleration"));
   }
-  
-  
-  
   
   // 从参数读取重力补偿前馈比例
   if (info_.hardware_parameters.count("gravity_feedforward_ratio")) {
@@ -161,16 +157,16 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
   limit_warn_counter_.resize(num_joints, 0);
 
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-              "已初始化：%zu 个关节，CAN 接口：%s", num_joints, can_interface_.c_str());
+              "已初始化：%zu 个关节,CAN 接口：%s", num_joints, can_interface_.c_str());
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-              "  max_vel=%.1f rad/s，max_acc=%.1f rad/s²",
+              "  max_vel=%.1f rad/s,max_acc=%.1f rad/s²",
               max_velocity_, max_acceleration_);
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-              "  PID：Kp=%.1f，Kd=%.1f，重力补偿前馈比例=%.0f%%",
+              "  PID：Kp=%.1f,Kd=%.1f,重力补偿前馈比例=%.0f%%",
               position_kp_, position_kd_, gravity_feedforward_ratio_ * 100.0);
   
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-              "关节限位保护：margin=%.3f rad，stop_margin=%.3f rad，decel_factor=%.2f",
+              "关节限位保护：margin=%.3f rad,stop_margin=%.3f rad,decel_factor=%.2f",
               limit_margin_, limit_stop_margin_, limit_decel_factor_);
 
   // 初始化调试发布器节点
@@ -193,7 +189,7 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
     gravity_params_[i] = {0.0, 0.0, 0.0};  // Default to 0
   }
   
-  // 从参数读取重力补偿（如果存在）
+  // 从参数读取重力补偿(如果存在)
   // 格式：gravity_comp_L1_sin, gravity_comp_L1_cos, gravity_comp_L1_offset 等
   std::vector<std::string> joint_prefixes = {"L1", "L2", "L3", "L4", "L5", "L6"};
   for (size_t i = 0; i < num_joints && i < joint_prefixes.size(); ++i) {
@@ -221,7 +217,7 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
   
   if (gravity_comp_enabled_) {
     RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-                "重力补偿已启用，参数如下：");
+                "重力补偿已启用,参数如下：");
     for (size_t i = 0; i < num_joints && i < joint_prefixes.size(); ++i) {
       RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
                   "  %s: sin=%.4f, cos=%.4f, offset=%.4f",
@@ -275,7 +271,7 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
         use_pinocchio_gravity_ = (info_.hardware_parameters.at("use_pinocchio_gravity") == "true");
       }
       
-      // 读取惯量缩放因子（用于标定微调）
+      // 读取惯量缩放因子(用于标定微调)
       inertia_scale_params_.resize(joint_configs_.size());
       for (size_t i = 0; i < joint_configs_.size(); ++i) {
         inertia_scale_params_[i].mass_scale = 1.0;
@@ -313,7 +309,7 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_init(
       }
       
       RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-                  "Pinocchio 重力补偿：%s（标定惯量：%s）",
+                  "Pinocchio 重力补偿：%s(标定惯量：%s)",
                   use_pinocchio_gravity_ ? "启用" : "禁用",
                   use_calibrated_inertia_ ? "是" : "否");
     }
@@ -461,7 +457,7 @@ bool RsA3HardwareInterface::parseJointConfig(const hardware_interface::HardwareI
     
     if (config.kp > 0.0 || config.kd > 0.0) {
       RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-                  "关节 %s：motor_id=%d，type=%s，dir=%.1f，限位=[%.1f°~%.1f°]，Kp=%.0f，Kd=%.1f",
+                  "关节 %s：motor_id=%d,type=%s,dir=%.1f,限位=[%.1f°~%.1f°],Kp=%.0f,Kd=%.1f",
                   config.name.c_str(), config.motor_id,
                   motorTypeName(config.motor_type),
                   config.direction,
@@ -469,7 +465,7 @@ bool RsA3HardwareInterface::parseJointConfig(const hardware_interface::HardwareI
                   config.kp, config.kd);
     } else {
       RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-                  "关节 %s：motor_id=%d，type=%s，dir=%.1f，限位=[%.1f°~%.1f°]",
+                  "关节 %s：motor_id=%d,type=%s,dir=%.1f,限位=[%.1f°~%.1f°]",
                   config.name.c_str(), config.motor_id,
                   motorTypeName(config.motor_type),
                   config.direction,
@@ -498,7 +494,7 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_configure(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // 为每个关节设置电机型号（添加延时避免 CAN 缓冲区溢出）
+  // 为每个关节设置电机型号(添加延时避免 CAN 缓冲区溢出)
   for (const auto& config : joint_configs_) {
     can_driver_->setMotorType(config.motor_id, config.motor_type);
     std::this_thread::sleep_for(std::chrono::milliseconds(50));  // Add delay
@@ -542,19 +538,19 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_activate(
   }
   std::this_thread::sleep_for(std::chrono::milliseconds(200));
   
-  // ============ 步骤 1：使能所有电机（Kp=0，无位置控制） ============
-  // 电机在失能状态不会回传反馈，因此必须先使能
+  // ============ 步骤 1：使能所有电机(Kp=0,无位置控制) ============
+  // 电机在失能状态不会回传反馈,因此必须先使能
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-              "正在以软模式使能电机（Kp=0）...");
+              "正在以软模式使能电机(Kp=0)...");
   
   for (size_t i = 0; i < joint_configs_.size(); ++i) {
     const auto& config = joint_configs_[i];
     
-    // 1) 先停止电机（不清故障，前面已清过）
+    // 1) 先停止电机(不清故障,前面已清过)
     can_driver_->disableMotor(config.motor_id, false);
     std::this_thread::sleep_for(std::chrono::milliseconds(30));
     
-    // 2) 设置为运控模式（run_mode = 0）
+    // 2) 设置为运控模式(run_mode = 0)
     if (!can_driver_->setRunMode(config.motor_id, RunMode::MOTION_CONTROL)) {
       RCLCPP_ERROR(rclcpp::get_logger("RsA3HardwareInterface"),
                    "电机 %d 设置运控模式失败", config.motor_id);
@@ -569,37 +565,37 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_activate(
       return hardware_interface::CallbackReturn::ERROR;
     }
     
-    // 4) [关键] 发送 Kp=0 的指令，使电机进入“软”状态，不跟踪任何位置
-    //    这样即使发送任意位置指令，电机也不会运动
+    // 4) [关键] 发送 Kp=0 的指令,使电机进入“软”状态,不跟踪任何位置
+    //    这样即使发送任意位置指令,电机也不会运动
     can_driver_->sendMotionControl(
         config.motor_id,
         config.motor_type,
-        0.0,          // 位置无关紧要，因为 Kp=0
+        0.0,          // 位置无关紧要,因为 Kp=0
         0.0,          // velocity = 0
-        0.0,          // Kp = 0（不跟踪位置！）
-        4.0,          // Kd = 4.0（提高阻尼，防止抖动）
+        0.0,          // Kp = 0(不跟踪位置！)
+        4.0,          // Kd = 4.0(提高阻尼,防止抖动)
         0.0           // torque = 0
     );
     
     RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-                "电机 %d 已以软模式使能（Kp=0，Kd=4）", config.motor_id);
+                "电机 %d 已以软模式使能(Kp=0,Kd=4)", config.motor_id);
     
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
 
-  // ============ 步骤 2：开环控制 - 使用默认位置 (0)，跳过反馈等待 ============
+  // ============ 步骤 2：开环控制 - 使用默认位置 (0),跳过反馈等待 ============
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-              "开环模式：所有关节使用默认位置 0.0，跳过反馈等待");
+              "开环模式：所有关节使用默认位置 0.0,跳过反馈等待");
   
   std::vector<double> initial_positions(joint_configs_.size(), 0.0);
   
   for (size_t i = 0; i < joint_configs_.size(); ++i) {
     const auto& config = joint_configs_[i];
     RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-                "电机 %d 初始位置：0.0 rad（开环）", config.motor_id);
+                "电机 %d 初始位置: 0.0 rad(开环)", config.motor_id);
   }
 
-  // ============ 步骤 3：发送保持指令（切换到正常控制） ============
+  // ============ 步骤 3：发送保持指令(切换到正常控制) ============
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
               "正在切换到位置保持模式...");
   
@@ -611,12 +607,11 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_activate(
     hw_commands_positions_[i] = initial_positions[i];
     smoothed_positions_[i] = initial_positions[i];
     smoothed_velocities_[i] = 0.0;
-    smoothed_accelerations_[i] = 0.0;
     
     // 计算电机坐标系下的位置
     double motor_pos = initial_positions[i] * config.direction + config.position_offset;
     
-    // 发送“保持当前位置”指令（正常 Kp/Kd）
+    // 发送“保持当前位置”指令(正常 Kp/Kd)
     can_driver_->sendMotionControl(
         config.motor_id,
         config.motor_type,
@@ -628,7 +623,7 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_activate(
     );
     
     RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-                "电机 %d 保持在 %.4f rad（Kp=%.0f，Kd=%.1f）",
+                "电机 %d 保持在 %.4f rad(Kp=%.0f,Kd=%.1f)",
                 config.motor_id, initial_positions[i], position_kp_, position_kd_);
     
     std::this_thread::sleep_for(std::chrono::milliseconds(30));
@@ -650,7 +645,7 @@ hardware_interface::CallbackReturn RsA3HardwareInterface::on_activate(
   }
 
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"), 
-              "硬件已激活（CSP 位置模式）");
+              "硬件已激活(CSP 位置模式)");
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -818,7 +813,7 @@ hardware_interface::return_type RsA3HardwareInterface::read(
           static int stale_warn = 0;
           if (stale_warn++ % 200 == 0) {
             RCLCPP_WARN(rclcpp::get_logger("RsA3HardwareInterface"),
-              "电机 %d 反馈数据已过期 (%ld ms)，可能通信中断",
+              "电机 %d 反馈数据已过期 (%ld ms),可能通信中断",
               config.motor_id, age_ms);
           }
         }
@@ -849,7 +844,7 @@ hardware_interface::return_type RsA3HardwareInterface::read(
         (1.0 - torque_ema_alpha) * filtered_torque_feedback_[i];
   }
 
-  // 发布温度数据（降频：每 50 次 read 发布一次）
+  // 发布温度数据(降频：每 50 次 read 发布一次)
   static int temp_pub_counter = 0;
   if (++temp_pub_counter >= 50) {
     temp_pub_counter = 0;
@@ -889,7 +884,7 @@ hardware_interface::return_type RsA3HardwareInterface::write(
     static int period_warn = 0;
     if (period_warn++ % 200 == 0) {
       RCLCPP_WARN(rclcpp::get_logger("RsA3HardwareInterface"),
-        "控制周期 %.1f ms 超出 2 倍标称值 (%.1f ms)，限幅处理",
+        "控制周期 %.1f ms 超出 2 倍标称值 (%.1f ms),限幅处理",
         dt * 1000.0, control_period_ * 1000.0);
     }
     dt = control_period_ * 2.0;
@@ -903,7 +898,6 @@ hardware_interface::return_type RsA3HardwareInterface::write(
     for (size_t i = 0; i < joint_configs_.size(); ++i) {
       smoothed_positions_[i] = hw_commands_positions_[i];
       smoothed_velocities_[i] = 0.0;
-      smoothed_accelerations_[i] = 0.0;
       gravity_input_positions_[i] = hw_commands_positions_[i];
       
       // Initialize velocity feedforward variables, avoid jump on first computation
@@ -915,7 +909,7 @@ hardware_interface::return_type RsA3HardwareInterface::write(
     }
     first_command_ = false;
     RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-                "收到首条指令，正在初始化位置");
+                "收到首条指令,正在初始化位置");
   }
   
   bool global_stop = false;
@@ -944,7 +938,7 @@ hardware_interface::return_type RsA3HardwareInterface::write(
       static int deadline_warn = 0;
       if (deadline_warn++ % 200 == 0) {
         RCLCPP_WARN(rclcpp::get_logger("RsA3HardwareInterface"),
-          "write() 接近 deadline，跳过关节 %zu 及之后", i);
+          "write() 接近 deadline,跳过关节 %zu 及之后", i);
       }
       break;
     }
@@ -960,7 +954,6 @@ hardware_interface::return_type RsA3HardwareInterface::write(
     double smoothed_velocity = (smoothed_positions_[i] - last_cmd_positions_[i]) / dt;
     last_cmd_positions_[i] = smoothed_positions_[i];
 
-    smoothed_accelerations_[i] = (smoothed_velocity - smoothed_velocities_[i]) / dt;
     smoothed_velocities_[i] = smoothed_velocity;
     
     if (applyJointLimitProtection(i, smoothed_positions_[i])) {
@@ -987,17 +980,17 @@ hardware_interface::return_type RsA3HardwareInterface::write(
 
       double cmd_velocity = std::clamp(ma_velocity, -velocity_limit_, velocity_limit_);
 
-      // ==== 轨迹结束/取消检测（双重判据）====
+      // ==== 轨迹结束/取消检测(双重判据)====
       // 直接监测原始指令位置 hw_commands_positions_ 是否还在变化：
-      // arm_controller 一旦进入 hold 模式（轨迹完成/被取消），它会把同一个位置
-      // 反复发下来 → cmd_pos_delta 立刻为 0。这是比 cmd_velocity 更快的信号，
-      // 因为不依赖位置 EMA 的衰减。检测到后**立即**把两级 EMA 状态归零，
-      // 让 filtered_velocity 在 1 个周期内变 0，杜绝电机 Kd·v_ff 残余把关节
-      // 继续往原方向推（轨迹结束的"沉一下"根因）。
+      // arm_controller 一旦进入 hold 模式(轨迹完成/被取消),它会把同一个位置
+      // 反复发下来 → cmd_pos_delta 立刻为 0。这是比 cmd_velocity 更快的信号,
+      // 因为不依赖位置 EMA 的衰减。检测到后**立即**把两级 EMA 状态归零,
+      // 让 filtered_velocity 在 1 个周期内变 0,杜绝电机 Kd·v_ff 残余把关节
+      // 继续往原方向推(轨迹结束的"沉一下"根因)。
       double cmd_pos_delta = std::abs(hw_commands_positions_[i] - last_hw_commands_positions_[i]);
       last_hw_commands_positions_[i] = hw_commands_positions_[i];
 
-      constexpr double POS_DELTA_THRESHOLD = 1e-5;  // rad/cycle，<2e-3 rad/s 视为停
+      constexpr double POS_DELTA_THRESHOLD = 1e-5;  // rad/cycle,<2e-3 rad/s 视为停
       constexpr double VEL_THRESHOLD       = 0.02;  // rad/s
       constexpr int    SETTLE_CYCLES       = 1;     // 1 周期 = 5ms 即触发
 
@@ -1030,7 +1023,7 @@ hardware_interface::return_type RsA3HardwareInterface::write(
                             max_velocity_change * (velocity_change > 0 ? 1.0 : -1.0);
       }
 
-      // 兜底：检测到停止时强制 filtered_velocity 也归零，跳过加速度限幅可能造成的尾巴
+      // 兜底：检测到停止时强制 filtered_velocity 也归零,跳过加速度限幅可能造成的尾巴
       if (stopped && velocity_settle_counter_[i] >= SETTLE_CYCLES) {
         filtered_velocity = 0.0;
       }
@@ -1057,7 +1050,7 @@ hardware_interface::return_type RsA3HardwareInterface::write(
     // Debug: periodic log output
     if (write_counter % 1000 == 0 && i == 0) {
       RCLCPP_DEBUG(rclcpp::get_logger("RsA3HardwareInterface"),
-                  "[速度前馈] 平滑位置差分速度=%.3f，滤波后=%.3f",
+                  "[速度前馈] 平滑位置差分速度=%.3f,滤波后=%.3f",
                   smoothed_velocity, filtered_velocity);
     }
     
@@ -1339,14 +1332,14 @@ bool RsA3HardwareInterface::applyJointLimitProtection(size_t joint_idx, double& 
     if (!joint_at_limit_[joint_idx]) {
       joint_at_limit_[joint_idx] = true;
       RCLCPP_WARN(rclcpp::get_logger("RsA3HardwareInterface"),
-                  "⚠️ 关节 %s 达到限位！pos=%.3f rad（%.1f°），limits=[%.2f, %.2f]",
+                  "⚠️ 关节 %s 达到限位！pos=%.3f rad(%.1f°),limits=[%.2f, %.2f]",
                   config.name.c_str(), target_pos, target_pos * 180.0 / M_PI,
                   lower, upper);
     }
     limit_warn_counter_[joint_idx]++;
     if (limit_warn_counter_[joint_idx] % 500 == 0) {
       RCLCPP_WARN(rclcpp::get_logger("RsA3HardwareInterface"),
-                  "关节 %s 仍处于限位区（count=%d）",
+                  "关节 %s 仍处于限位区(count=%d)",
                   config.name.c_str(), limit_warn_counter_[joint_idx]);
     }
   } else {
@@ -1437,10 +1430,10 @@ std::vector<double> RsA3HardwareInterface::computePinocchioGravity(
         scale = inertia_scale_params_[i].mass_scale;
       }
 
-      // 返回 URDF/关节坐标系下的重力力矩（不在这里乘 direction）。
+      // 返回 URDF/关节坐标系下的重力力矩(不在这里乘 direction)。
       // direction 只在 write() 里把 cmd_torque 转换成电机坐标系时乘一次：
       //   motor_cmd_torque = cmd_torque * direction
-      // 之前这里也乘了一次 direction，导致 direction=-1 的关节（L1/L3/L5）
+      // 之前这里也乘了一次 direction,导致 direction=-1 的关节(L1/L3/L5)
       // 重力前馈方向反向 —— 表现为机械臂在重力下方向上"被前馈拽下来"的下垂。
       gravity_torques[i] = tau[i] * scale;
     }
@@ -1610,7 +1603,7 @@ void RsA3HardwareInterface::applyCalibratedInertiaToModel()
     pinocchio_model_.inertias[i + 1].lever()[2] = params.com_z;
     
     RCLCPP_DEBUG(rclcpp::get_logger("RsA3HardwareInterface"),
-                 "  已更新 L%zu：mass=%.4f，com=[%.4f, %.4f, %.4f]",
+                 "  已更新 L%zu：mass=%.4f,com=[%.4f, %.4f, %.4f]",
                  i + 1, params.mass, params.com_x, params.com_y, params.com_z);
   }
   
@@ -1618,7 +1611,7 @@ void RsA3HardwareInterface::applyCalibratedInertiaToModel()
   pinocchio_data_ = pinocchio::Data(pinocchio_model_);
   
   RCLCPP_INFO(rclcpp::get_logger("RsA3HardwareInterface"),
-              "Pinocchio 模型已更新（已应用标定惯量参数）");
+              "Pinocchio 模型已更新(已应用标定惯量参数)");
 }
 
 rcl_interfaces::msg::SetParametersResult RsA3HardwareInterface::onParameterChange(

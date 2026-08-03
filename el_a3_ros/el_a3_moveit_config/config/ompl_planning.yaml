@@ -1,13 +1,9 @@
 # OMPL planning configuration for EL-A3 robot arm
 #
-# S-Curve Trajectory Smoothing:
-# The hardware interface (el_a3_hardware) implements a standard 7-segment S-curve
-# trajectory generator that processes all position commands. This ensures smooth
-# motion with continuous acceleration (jerk-limited) regardless of the trajectory
-# source (MoveIt planning or Xbox controller).
-#
-# The TOTG (Time-Optimal Trajectory Generation) handles velocity/acceleration
-# limits, while the hardware layer adds jerk limiting for S-curve smoothness.
+# Trajectory smoothing: TOTG (Time-Optimal Trajectory Generation) handles
+# velocity/acceleration limits; the hardware interface additionally applies
+# EMA low-pass smoothing and velocity/acceleration clamping to all position
+# commands (MoveIt planning or Xbox teleop).
 
 planning_plugin: ompl_interface/OMPLPlanner
 request_adapters: >-
@@ -19,7 +15,6 @@ request_adapters: >-
 start_state_max_bounds_error: 0.1
 
 # Time parameterization settings (TOTG)
-# Note: Actual S-curve smoothing is done in hardware layer
 totg:
   path_tolerance: 0.1      # Path deviation tolerance
   resample_dt: 0.01        # Resample time step (100Hz)

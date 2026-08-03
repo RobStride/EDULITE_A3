@@ -1,4 +1,4 @@
 # Resolve -I paths for this package (clangd does not read ament/colcon by default).
-# Path is relative to this file: ../build/el_a3_hardware/compile_commands.json
+# Path is relative to this file: ../../build/el_a3_hardware/compile_commands.json
 CompileFlags:
-  CompilationDatabase: ../build/el_a3_hardware
+  CompilationDatabase: ../../build/el_a3_hardware
