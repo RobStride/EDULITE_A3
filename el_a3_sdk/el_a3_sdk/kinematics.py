@@ -343,8 +343,8 @@ class ELA3Kinematics:
         tau = M(q)*a + C(q,v)*v + g(q)
         """
         q_pin = self._to_pinocchio_q(q)
-        v_pin = np.array(v, dtype=float)
-        a_pin = np.array(a, dtype=float)
+        v_pin = self._to_pinocchio_v(v)
+        a_pin = self._to_pinocchio_v(a)
         tau = pin.rnea(self._model, self._data, q_pin, v_pin, a_pin)
         return [float(tau[i]) for i in range(self._model.nv)]
 
@@ -361,8 +361,8 @@ class ELA3Kinematics:
         a = M(q)^{-1} * (tau - C(q,v)*v - g(q))
         """
         q_pin = self._to_pinocchio_q(q)
-        v_pin = np.array(v, dtype=float)
-        tau_pin = np.array(tau, dtype=float)
+        v_pin = self._to_pinocchio_v(v)
+        tau_pin = self._to_pinocchio_v(tau)
         a = pin.aba(self._model, self._data, q_pin, v_pin, tau_pin)
         return [float(a[i]) for i in range(self._model.nv)]
 
@@ -396,7 +396,7 @@ class ELA3Kinematics:
             (nv, nv) numpy 数组
         """
         q_pin = self._to_pinocchio_q(q)
-        v_pin = np.array(v, dtype=float)
+        v_pin = self._to_pinocchio_v(v)
         C = pin.computeCoriolisMatrix(self._model, self._data, q_pin, v_pin)
         return C.copy()
 
@@ -410,6 +410,12 @@ class ELA3Kinematics:
         if len(q_arr) < self._model.nq:
             q_arr = np.concatenate([q_arr, np.zeros(self._model.nq - len(q_arr))])
         return q_arr
+    
+    def _to_pinocchio_v(self,v:List[float]) -> np.ndarray:
+        v_arr = np.array(v[:self._model.nv],dtype=float)
+        if len(v_arr)< self.model.nv:
+            v_arr = np.concatenate([v_arr,np.zeros(self.model.nq - len(v_arr))])
+        return v_arr
 
     def _from_pinocchio_q(self, q_pin: np.ndarray) -> List[float]:
         """将 Pinocchio 配置向量转为用户列表"""
